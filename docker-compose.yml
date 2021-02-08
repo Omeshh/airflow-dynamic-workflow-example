@@ -5,7 +5,7 @@ services:
         user: airflow
         restart: always
         environment:
-            - FERNET_KEY=JimBEiep289ts4k7FdUO0rgIkD6TdbjdKhgQ-2smMyY=
+            - FERNET_KEY=<fernet_key>
             - DAGS_FOLDER=/usr/local/airflow/dags
             - AIRFLOW_HOME=/usr/local/airflow
             - AIRFLOW__SMTP__SMTP_HOST=smtp.office365.com
