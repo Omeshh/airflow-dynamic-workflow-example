@@ -1,0 +1,37 @@
+DEFAULT:
+  dag_id: 'dynamic_workflow_{config_filename}'
+  dag_start_date: 2020, 3, 26
+  dag_schedule_interval: 0 12 * * *
+  dag_depends_on_past: True
+  dag_catchup: True
+
+  ftp_conn_id: ftp_xyz
+  ftp_conn_type: sftp
+  aws_connection_id: aws_default
+
+  config_filenames:
+    - data_source_1.yaml
+    - data_source_2.yaml
+    - data_source_3.yaml
+
+  remote_inbound_path: /incoming
+  s3_bucket: dev.data.etl
+  sensor_timeout: 7200
+  sync_s3_and_sftp: False
+
+  output_date_format: '%Y-%m'
+  search_expr:
+  gpg_decrypt: False
+  unzip: False
+  import: True
+
+  databricks_job_prefix: ''
+
+
+PROD:
+  s3_bucket: test.domain.com
+  databricks_job_prefix: _TEST_
+
+
+LOCAL:
+  dag_email: test@domain.com

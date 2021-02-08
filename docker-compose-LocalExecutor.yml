@@ -1,0 +1,50 @@
+version: '2.1'
+services:
+    postgres:
+        image: postgres:9.6
+        container_name: airflow_postgres_1
+        environment:
+            - POSTGRES_USER=airflow
+            - POSTGRES_PASSWORD=airflow
+            - POSTGRES_DB=airflow
+        ports:
+            - "5432:5432"
+    webserver:
+        image: artifactory.domain.com/docker-virtual/-airflow:2.1.1
+        user: airflow
+        container_name: airflow_webserver_1
+        restart: always
+        depends_on:
+            - postgres
+        environment:
+            - LOAD_EX=n
+            - EXECUTOR=Local
+            - FERNET_KEY=<fernet_key>
+            - DAGS_FOLDER=/usr/local/airflow/dags
+            - AIRFLOW_HOME=/usr/local/airflow
+            - AIRFLOW__SMTP__SMTP_HOST=smtp.office365.com
+            - AIRFLOW__SMTP__SMTP_PORT=587
+            - AIRFLOW__SMTP__SMTP_MAIL_FROM=<from_email>
+            - AIRFLOW__SMTP__SMTP_USER=<user>
+            - AIRFLOW__SMTP__SMTP_PASSWORD=<password>
+            - AIRFLOW__CORE__LOAD_EXAMPLES=false
+
+        volumes:
+            - ./dags:/usr/local/airflow/dags
+            - ./config:/usr/local/airflow/config
+            - ./sql:/usr/local/airflow/sql
+            - ./emails:/usr/local/airflow/emails
+            - ./data:/usr/local/airflow/data
+            - ./keys:/usr/local/airflow/keys
+            - ./scripts:/usr/local/airflow/scripts
+            - ./tests:/usr/local/airflow/tests
+            - ./requirements.txt:/requirements.txt
+
+        ports:
+            - "8080:8080"
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3

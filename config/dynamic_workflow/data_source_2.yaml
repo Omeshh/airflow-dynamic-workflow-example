@@ -1,0 +1,26 @@
+DEFAULT:
+  dag_start_date: 2020, 3, 26
+  dag_schedule_interval: 0 12 * * *
+
+  file_specs:
+    misc:
+      directory_pattern: /xyz/retrieved_from_xyz/date=<date>
+      import: False
+    file_type_1:
+      search_expr: P.*PATTERN.*.ZIP
+      unzipped_search_expr: P.*PATTERN.*.CSV
+      directory_pattern: /dynamic_workflow/xyz/date=<date>
+      config_path: /dbfs/etl/dp/config/dynamic_workflow_file_type_1.json
+      unzip: True
+    file_type_2:
+      search_expr: P.*PATTERN.*.ZIP
+      unzipped_search_expr: P.*PATTERN.*.CSV
+      directory_pattern: /dynamic_workflow/abc/date=<date>
+      config_path: /dbfs/etl/dp/config/dynamic_workflow_file_type_2.json
+      unzip: True
+
+PROD:
+  remote_inbound_path: /from_xyz
+  remote_outbound_path: /to_abc
+  source_s3_bucket: test.domain.com
+  target_s3_bucket: etl.test.domain.com

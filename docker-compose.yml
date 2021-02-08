@@ -1,0 +1,37 @@
+version: '2.1'
+services:
+     webserver:
+        image: artifactory.domain.com/docker-virtual/-airflow:1.10.4
+        user: airflow
+        restart: always
+        environment:
+            - FERNET_KEY=JimBEiep289ts4k7FdUO0rgIkD6TdbjdKhgQ-2smMyY=
+            - DAGS_FOLDER=/usr/local/airflow/dags
+            - AIRFLOW_HOME=/usr/local/airflow
+            - AIRFLOW__SMTP__SMTP_HOST=smtp.office365.com
+            - AIRFLOW__SMTP__SMTP_PORT=587
+            - AIRFLOW__SMTP__SMTP_MAIL_FROM=database@.domaincom
+            - AIRFLOW__SMTP__SMTP_USER=database@.com
+            - AIRFLOW__SMTP__SMTP_PASSWORD=<password>
+            - AIRFLOW__CORE__LOAD_EXAMPLES=false
+            - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=10
+            - AIRFLOW__SCHEDULER__SCHEDULER_MAX_THREADS=2
+        volumes:
+            - ./dags:/usr/local/airflow/dags
+            - ./config:/usr/local/airflow/config
+            - ./sql:/usr/local/airflow/sql
+            - ./emails:/usr/local/airflow/emails
+            - ./data:/usr/local/airflow/data
+            - ./keys:/usr/local/airflow/keys
+            - ./scripts:/usr/local/airflow/scripts
+            - ./tests:/usr/local/airflow/tests            
+            - ./requirements.txt:/requirements.txt
+            - ./keys/.aws:/usr/local/airflow/.aws
+        ports:
+            - "8080:8080"
+        command: webserver
+        healthcheck:
+            test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+            interval: 30s
+            timeout: 30s
+            retries: 3

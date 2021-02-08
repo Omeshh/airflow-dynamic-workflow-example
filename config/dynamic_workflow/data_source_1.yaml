@@ -1,0 +1,22 @@
+DEFAULT:
+  dag_start_date: 2020, 3, 26
+  dag_schedule_interval: 0 12 * * *
+
+  ftp_conn_id: ftp_src1
+  crypt_conn: crypto_src1
+
+  file_specs:
+    file_type_1:
+        search_expr: .*PATTERN.*
+        directory_pattern: /dynamic_workflow/file_type_1/pattern/date=<date>
+        config_path: /dbfs/etl/config/dynamic_workflow_file_type_1.json
+        gpg_decrypt: True
+    file_type_2:
+        search_expr: PATTERN.*
+        directory_pattern: /dynamic_workflow/file_type_2/pattern/date=<date>
+        config_path: /dbfs/etl/config/dynamic_workflow_file_type_2.json
+        gpg_decrypt: True
+
+
+PROD:
+  remote_inbound_path: /gets

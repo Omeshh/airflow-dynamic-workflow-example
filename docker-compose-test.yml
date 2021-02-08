@@ -1,0 +1,11 @@
+version: "2.1"
+services:
+    tests:
+        image: artifactory.domain.com/docker-virtual/airflow-test-only:2.1.0
+        volumes:
+            - ./:/usr/src/testdir
+        environment:
+            - SLUGIFY_USES_TEXT_UNIDECODE=yes
+            - AIRFLOW_DAGS=dags
+        command: "bash -c 'cd /usr/src/testdir && export PYTHONPATH=$$PWD/$$AIRFLOW_DAGS && pip install -r requirements.txt && cd tests/ && python -m unittest discover .'"
+        network_mode: bridge
