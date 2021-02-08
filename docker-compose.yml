@@ -14,8 +14,6 @@ services:
             - AIRFLOW__SMTP__SMTP_USER=database@.com
             - AIRFLOW__SMTP__SMTP_PASSWORD=<password>
             - AIRFLOW__CORE__LOAD_EXAMPLES=false
-            - AIRFLOW__SCHEDULER__MIN_FILE_PROCESS_INTERVAL=10
-            - AIRFLOW__SCHEDULER__SCHEDULER_MAX_THREADS=2
         volumes:
             - ./dags:/usr/local/airflow/dags
             - ./config:/usr/local/airflow/config
